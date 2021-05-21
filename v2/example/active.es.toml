@@ -13,3 +13,6 @@ description = "The number of unread emails a person has"
 hash = "sha1-3a672fa89c5c8564bb233c907638004983792464"
 one = "{{.Name}} tiene {{.UnreadEmailCount}} correo electrónico no leído"
 other = "{{.Name}} tiene {{.UnreadEmailCount}} correos electrónicos no leídos"
+
+[UniversalTest]
+other = " " # not accept empty value ""

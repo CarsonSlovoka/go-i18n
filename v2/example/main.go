@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	textTmp "text/template"
 
 	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
@@ -79,11 +80,54 @@ func main() {
 			},
 		})
 
+		demoDelim := localizer.MustLocalize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:         "HelloPerson",
+				LeftDelim:  "<<",
+				RightDelim: ">>",
+				Other:      "Hello <<.Name>>",
+			},
+			TemplateData: map[string]string{
+				"Name": name,
+			},
+		})
+
+		demoFuncs := localizer.MustLocalize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{ // set the default for your default "toml"
+				ID: "UniversalTest", // since, ``active.es.toml`` not belong ``bundle.MustLoadMessageFile("active.es.toml")`` so this ID must exists on its contents.
+				Other: `{{largest .Numbers}}
+{{sayHi}}
+`,
+			},
+			TemplateData: map[string]interface{}{
+				"Numbers": []float64{3, 3.2, 6, 1.2},
+			},
+			Funcs: textTmp.FuncMap{
+				"largest": func(slice []float64) float64 {
+					if len(slice) == 0 {
+						return 0
+					}
+					max := slice[0]
+					for _, val := range slice[1:] {
+						if val > max {
+							max = val
+						}
+					}
+					return max
+				},
+				"sayHi": func() string {
+					return "Hello World"
+				},
+			},
+		})
+
 		err := page.Execute(w, map[string]interface{}{
 			"Title": helloPerson,
 			"Paragraphs": []string{
+				demoDelim,
 				myUnreadEmails,
 				personUnreadEmails,
+				demoFuncs,
 			},
 		})
 		if err != nil {

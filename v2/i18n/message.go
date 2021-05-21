@@ -18,7 +18,7 @@ type Message struct {
 	// context to translators that may be relevant for translation.
 	Description string
 
-	// LeftDelim is the left Go template delimiter.
+	// LeftDelim is the left Go template delimiter. // https://golang.org/pkg/text/template/#hdr-Text_and_spaces
 	LeftDelim string
 
 	// RightDelim is the right Go template delimiter.``

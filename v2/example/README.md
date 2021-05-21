@@ -9,5 +9,11 @@ go run main.go
 Then open http://localhost:8080 in your web browser.
 
 You can customize the template data and locale via query parameters like this:
-http://localhost:8080/?name=Nick&unreadEmailCount=2
-http://localhost:8080/?name=Nick&unreadEmailCount=2&lang=es
+- http://localhost:8080/?name=Nick&unreadEmailCount=2
+- http://localhost:8080/?name=Nick&unreadEmailCount=2&lang=es
+
+# More Example
+
+go here to find more usage:
+
+> https://github.com/nicksnyder/go-i18n/tree/main/v2/goi18n
