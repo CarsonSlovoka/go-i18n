@@ -31,7 +31,7 @@ func main() {
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 	// No need to load active.en.toml since we are providing default translations.
-	// bundle.MustLoadMessageFile("active.en.toml")
+	bundle.MustLoadMessageFile("active.en.toml") // If you ignore this, you must provide ``DefaultMessage``, to let it know the content of `i18n.NewBundle(language.English)` is.
 	bundle.MustLoadMessageFile("active.es.toml")
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -93,8 +93,8 @@ func main() {
 		})
 
 		demoFuncs := localizer.MustLocalize(&i18n.LocalizeConfig{
-			DefaultMessage: &i18n.Message{ // set the default for your default "toml"
-				ID: "UniversalTest", // since, ``active.es.toml`` not belong ``bundle.MustLoadMessageFile("active.es.toml")`` so this ID must exists on its contents.
+			DefaultMessage: &i18n.Message{ // set the default for your ``i18n.NewBundle(language.English)``
+				ID: "UniversalTest", // since, ``active.es.toml`` not belong ``i18n.NewBundle(language.English)`` so this ID must exists on its contents. Otherwise, when you browse "es" will fail.
 				Other: `{{largest .Numbers}}
 {{sayHi}}
 `,
@@ -121,6 +121,14 @@ func main() {
 			},
 		})
 
+		demoMessageID := localizer.MustLocalize(&i18n.LocalizeConfig{
+			// DefaultMessage: // we are not set the ``DefaultMessage``, so we should cancel comment about bundle.MustLoadMessageFile("active.en.toml"), to let it know the DefaultMessage is.
+			MessageID: "HelloPerson",
+			TemplateData: map[string]interface{}{
+				"Name": name,
+			},
+		})
+
 		err := page.Execute(w, map[string]interface{}{
 			"Title": helloPerson,
 			"Paragraphs": []string{
@@ -128,6 +136,7 @@ func main() {
 				myUnreadEmails,
 				personUnreadEmails,
 				demoFuncs,
+				demoMessageID,
 			},
 		})
 		if err != nil {
