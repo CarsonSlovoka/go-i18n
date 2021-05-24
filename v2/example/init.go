@@ -2,6 +2,7 @@ package example
 
 import (
 	"errors"
+	"fmt"
 	"github.com/BurntSushi/toml"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
@@ -21,7 +22,19 @@ func assertEqual(expected, actual interface{}, errMsg string) error {
 	return nil
 }
 
-func MustCheckLegalLang(lang string) {
+type localizeTestData struct {
+	TemplateData interface{}
+	Lang string
+	Expected interface{}
+}
+
+func mustAssertEqual(expected, actual interface{}, errMsg string) {
+	if err := assertEqual(expected, actual, errMsg); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func mustCheckLegalLang(lang string) {
 	// lang: en, es, zh-tw, ...
 	_, _, err := language.ParseAcceptLanguage(lang)
 	if err != nil {
@@ -29,8 +42,16 @@ func MustCheckLegalLang(lang string) {
 	}
 }
 
-type LocalizeTestData struct {
-	TemplateData interface{}
-	Lang string
-	Expected interface{}
+func simpleTest(bundle *i18n.Bundle, messageID string, testDataSlice []*localizeTestData) {
+	for _, testData := range testDataSlice {
+
+		mustCheckLegalLang(testData.Lang) // check only
+		localizer := i18n.NewLocalizer(bundle, testData.Lang)
+		resultStr := localizer.MustLocalize(&i18n.LocalizeConfig{
+			MessageID: messageID,
+			TemplateData: testData.TemplateData,
+		})
+		errMsg := fmt.Sprintf("%s != %s", testData.Expected, resultStr)
+		mustAssertEqual(testData.Expected, resultStr, errMsg)
+	}
 }
