@@ -1,5 +1,5 @@
 // Command example runs a sample webserver that uses go-i18n/v2/i18n.
-package main
+package example
 
 import (
 	"fmt"
@@ -27,12 +27,12 @@ var page = template.Must(template.New("").Parse(`
 </html>
 `))
 
-func main() {
+func demoBasic() {
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 	// No need to load active.en.toml since we are providing default translations.
-	bundle.MustLoadMessageFile("active.en.toml") // If you ignore this, you must provide ``DefaultMessage``, to let it know the content of `i18n.NewBundle(language.English)` is.
-	bundle.MustLoadMessageFile("active.es.toml")
+	bundle.MustLoadMessageFile("i18n/active.en.toml") // If you ignore this, you must provide ``DefaultMessage``, to let it know the content of `i18n.NewBundle(language.English)` is.
+	bundle.MustLoadMessageFile("i18n/active.es.toml")
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		lang := r.FormValue("lang")
