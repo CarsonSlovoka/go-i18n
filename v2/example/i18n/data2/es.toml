@@ -1,0 +1,11 @@
+[HiUser]
+other = "Hola {{.User}}"
+
+[More]
+other = "(ES) More"
+
+[readMore]
+other = "(ES) read more"
+
+[whatsInThis]
+other = "(ES) What's in this {{ .Type }}"

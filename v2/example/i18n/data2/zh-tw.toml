@@ -1,0 +1,11 @@
+[HiUser]
+other = "嗨 {{.User}}"
+
+[More]
+other = "更多"
+
+[readMore]
+other = "閱讀更多"
+
+[whatsInThis]
+other = "此型別: {{ .Type }}"

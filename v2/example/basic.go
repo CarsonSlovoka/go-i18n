@@ -4,8 +4,10 @@ package example
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	textTmp "text/template"
 
@@ -146,4 +148,39 @@ func demoBasic() {
 
 	fmt.Println("Listening on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func demoUseFunc2Render() {
+	/*
+		This example is pretty like to one below
+		> https://gohugo.io/functions/i18n/
+	*/
+	bundle := getTestBundle()
+	i18nTmpl := &I18nTmpl{bundle: bundle}
+
+	ConfigData := map[string]interface{}{ // It simulates you load the data from your config files.
+		"User": "Carson",
+		"Type": "Interface", // other = "What's in this {{ .Type }}"
+	}
+
+	for _, curLang := range []string{"en", "es", "zh-tw"} {
+		bundle.MustLoadMessageFile(fmt.Sprintf("i18n/data2/%s.toml", curLang))
+
+		expr := `<h1>{{.Title}}</h1>
+{{range .Paragraphs}}<p>{{ i18n .}}</p>{{end}}
+{{ i18n "whatsInThis" }}
+{{ T "whatsInThis" }}
+`
+		i18nTmpl.MustCompile(curLang, expr, ConfigData)
+		writerStore := &WriterStore{}
+		multipleWriter := io.MultiWriter(os.Stdout, writerStore)
+		i18nTmpl.MustRender(multipleWriter, Context{
+			"Title": "DemoRenderTmpl",
+			"Paragraphs": []MessageID{
+				"More",
+				"readMore",
+			}},
+		)
+		fmt.Println(writerStore.Data)
+	}
 }
