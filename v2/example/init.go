@@ -26,6 +26,7 @@ type localizeTestData struct {
 	TemplateData interface{}
 	Lang string
 	Expected interface{}
+	PluralCount interface{}
 }
 
 func mustAssertEqual(expected, actual interface{}, errMsg string) {
@@ -50,6 +51,7 @@ func simpleTest(bundle *i18n.Bundle, messageID string, testDataSlice []*localize
 		resultStr := localizer.MustLocalize(&i18n.LocalizeConfig{
 			MessageID: messageID,
 			TemplateData: testData.TemplateData,
+			PluralCount: testData.PluralCount,
 		})
 		errMsg := fmt.Sprintf("%s != %s", testData.Expected, resultStr)
 		mustAssertEqual(testData.Expected, resultStr, errMsg)

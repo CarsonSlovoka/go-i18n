@@ -14,3 +14,7 @@ func TestDemoUseFunc2Render(t *testing.T) {
 func TestDemoZeroOneTwoFewManyOther(t *testing.T) {
 	demoZeroOneTwoFewManyOther()
 }
+
+func TestDemoJSON(t *testing.T) {
+	DemoJSON()
+}

@@ -2,6 +2,7 @@
 package example
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -186,7 +187,6 @@ func demoUseFunc2Render() {
 	}
 }
 
-
 func demoZeroOneTwoFewManyOther() {
 	bundle := i18n.NewBundle(language.Arabic)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
@@ -215,4 +215,22 @@ func demoZeroOneTwoFewManyOther() {
 		})
 		fmt.Println(localize)
 	}
+}
+
+func DemoJSON() {
+	bundle := i18n.NewBundle(language.English)
+	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
+	bundle.MustLoadMessageFile("i18n/data3-json/en.json") // If you ignore this, you must provide ``DefaultMessage``, to let it know the content of `i18n.NewBundle(language.English)` is.
+	bundle.MustLoadMessageFile("i18n/data3-json/zh-tw.json")
+
+	type TmplContext map[string]interface{}
+	simpleTest(bundle, "IDS_USER", []*localizeTestData{
+		{TemplateData: TmplContext{"Name": "Carson"}, Lang: "en", Expected: "User: Carson"},
+		{TmplContext{"Name": "Carson"}, "zh-tw", "使用者: Carson", nil},
+	})
+
+	simpleTest(bundle, "IDS_COUNT", []*localizeTestData{
+		{TemplateData: nil, Lang: "en", Expected: "1 item", PluralCount: 1},
+		{TmplContext{"Count": "unknown"}, "en", "unknown item", nil},
+	})
 }

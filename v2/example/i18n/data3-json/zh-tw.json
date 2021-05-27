@@ -1,0 +1,9 @@
+{
+  "IDS_USER": {
+    "other": "使用者: {{.Name}}"
+  },
+  "IDS_COUNT": {
+    "one": "1 項目",
+    "other": "{{.Count}} 項目"
+  }
+}

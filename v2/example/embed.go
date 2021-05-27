@@ -24,8 +24,8 @@ func demoSpecifyFile() error {
 	// bundle.MustParseMessageFileBytes(bytesCH, ENFilePath)
 
 	for _, testData := range []*localizeTestData{
-		{"Bob", "en", "Hello Bob"},
-		{"卡森", "zh-tw", "您好 卡森!"},
+		{"Bob", "en", "Hello Bob", nil},
+		{"卡森", "zh-tw", "您好 卡森!", nil},
 	} {
 		mustCheckLegalLang(testData.Lang) // check only
 		localizer := i18n.NewLocalizer(bundle, testData.Lang)
@@ -74,8 +74,8 @@ func demoDir() {
 	// Start Test
 	type TmplContext map[string]interface{}
 	simpleTest(bundle, "HelloPerson", []*localizeTestData{
-		{TemplateData: TmplContext{"Name": "Bob"}, Lang: "en", Expected: "Hello Bob"},
-		{TmplContext{"Name": "Bar"}, "es", "Hola Bar"},
-		{TmplContext{"Name": "卡森"}, "zh-tw", "您好 卡森!"},
+		{TemplateData: TmplContext{"Name": "Bob"}, Lang: "en", Expected: "Hello Bob", PluralCount: nil},
+		{TmplContext{"Name": "Bar"}, "es", "Hola Bar", nil},
+		{TmplContext{"Name": "卡森"}, "zh-tw", "您好 卡森!", nil},
 	})
 }
