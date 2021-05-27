@@ -16,7 +16,9 @@ import (
 	"golang.org/x/text/language"
 )
 
-var page = template.Must(template.New("").Parse(`
+func demoBasic() {
+
+	var page = template.Must(template.New("").Parse(`
 <!DOCTYPE html>
 <html>
 <body>
@@ -29,7 +31,6 @@ var page = template.Must(template.New("").Parse(`
 </html>
 `))
 
-func demoBasic() {
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 	// No need to load active.en.toml since we are providing default translations.
@@ -182,5 +183,36 @@ func demoUseFunc2Render() {
 			}},
 		)
 		fmt.Println(writerStore.Data)
+	}
+}
+
+
+func demoZeroOneTwoFewManyOther() {
+	bundle := i18n.NewBundle(language.Arabic)
+	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+	localizer := i18n.NewLocalizer(bundle, "ar")
+
+	for _, curCount := range []interface{}{0, 1, 2,
+		3, 10, // Few range
+		11, 99, // many
+		nil, // other
+	} {
+		localize := localizer.MustLocalize(&i18n.LocalizeConfig{
+			DefaultMessage: &i18n.Message{
+				ID:    "PersonCats",
+				Zero:  "zero 0",
+				One:   "1 一",
+				Two:   "2 二",
+				Few:   "3-10",
+				Many:  "11-99",
+				Other: "{{.Name}} has {{.Count}} cats.",
+			},
+			TemplateData: map[string]interface{}{
+				"Name":  "Nick",
+				"Count": 2,
+			},
+			PluralCount: curCount,
+		})
+		fmt.Println(localize)
 	}
 }
