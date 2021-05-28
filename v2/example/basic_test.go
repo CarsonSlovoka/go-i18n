@@ -3,7 +3,7 @@ package example
 import "testing"
 
 func TestDemoBasic(t *testing.T) {
-	demoBasic()
+	// DemoBasic() // This example is not suitable for the test because it involves interaction with the user. If you want to test, then you can call this function on your project and run it.
 }
 
 
@@ -16,5 +16,5 @@ func TestDemoZeroOneTwoFewManyOther(t *testing.T) {
 }
 
 func TestDemoJSON(t *testing.T) {
-	DemoJSON()
+	demoJSON()
 }

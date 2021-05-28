@@ -17,7 +17,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-func demoBasic() {
+func DemoBasic() {
 
 	var page = template.Must(template.New("").Parse(`
 <!DOCTYPE html>
@@ -217,7 +217,7 @@ func demoZeroOneTwoFewManyOther() {
 	}
 }
 
-func DemoJSON() {
+func demoJSON() {
 	bundle := i18n.NewBundle(language.English)
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 	bundle.MustLoadMessageFile("i18n/data3-json/en.json") // If you ignore this, you must provide ``DefaultMessage``, to let it know the content of `i18n.NewBundle(language.English)` is.
