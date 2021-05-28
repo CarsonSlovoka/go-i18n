@@ -64,11 +64,17 @@ func demoDir() {
 			continue
 		}
 		langFilePath := path.Join(myLangDirPath, dirEntry.Name())
-		bytesLang, err := i18nDirFS.ReadFile(langFilePath)
-		if err != nil {
-			log.Fatal(err)
+
+		/*
+			bytesLang, err := i18nDirFS.ReadFile(langFilePath)
+			if err != nil {
+				log.Fatal(err)
+			}
+			bundle.MustParseMessageFileBytes(bytesLang, langFilePath)
+		*/
+		if _, err := bundle.LoadMessageFileFS(i18nDirFS, langFilePath); err != nil {
+			panic(err)
 		}
-		bundle.MustParseMessageFileBytes(bytesLang, langFilePath)
 	}
 
 	// Start Test
