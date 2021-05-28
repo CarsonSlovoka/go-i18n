@@ -3,6 +3,7 @@ on: #   https://docs.github.com/en/actions/reference/workflow-syntax-for-github-
   push:
     paths:
       - "v2/example/*_test.go"
+      - "v2/go.mod"
 
 name: Test *_test.go
 env: # Sharing with all jobs.
